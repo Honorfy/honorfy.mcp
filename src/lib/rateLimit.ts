@@ -1,4 +1,4 @@
-import { HonorfyMcpError } from './errors.js';
+import { HonorfyMcpError } from "./errors.js";
 
 type Bucket = { count: number; windowStartMs: number };
 
@@ -10,7 +10,7 @@ export class SlidingWindowRateLimiter {
 
   constructor(
     private readonly maxPerMinute: number,
-    private readonly windowMs: number = 60_000
+    private readonly windowMs: number = 60_000,
   ) {}
 
   consume(key: string): void {
@@ -22,7 +22,7 @@ export class SlidingWindowRateLimiter {
     }
     if (existing.count >= this.maxPerMinute) {
       throw new HonorfyMcpError({
-        code: 'RATE_LIMITED',
+        code: "RATE_LIMITED",
         message: `Limite de chamadas por minuto excedido (${this.maxPerMinute}). Aguarde e tente novamente.`,
         retryable: true,
       });

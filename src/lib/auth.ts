@@ -1,4 +1,4 @@
-import type { HonorfyMcpConfig } from './config.js';
+import type { HonorfyMcpConfig } from "./config.js";
 
 /**
  * Abstração de autenticação: v1 lê token do ambiente; futuro OAuth pode implementar a mesma interface.
@@ -15,6 +15,8 @@ export class EnvUserTokenProvider implements AccessTokenProvider {
   }
 }
 
-export function createAccessTokenProvider(config: HonorfyMcpConfig): AccessTokenProvider {
+export function createAccessTokenProvider(
+  config: HonorfyMcpConfig,
+): AccessTokenProvider {
   return new EnvUserTokenProvider(config.HONORFY_USER_TOKEN);
 }

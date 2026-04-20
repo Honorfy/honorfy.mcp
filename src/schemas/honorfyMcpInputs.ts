@@ -1,12 +1,12 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /** Espelha enums usados em filtros de listagem (sem depender de @honorfy/shared no typecheck). */
 const saleStatusEnum = z.enum([
-  'PENDING',
-  'APPROVED',
-  'REJECTED',
-  'CANCELED',
-  'COMPLETED',
+  "PENDING",
+  "APPROVED",
+  "REJECTED",
+  "CANCELED",
+  "COMPLETED",
 ]);
 
 const paginationFields = {
@@ -19,7 +19,9 @@ export const companyIdFieldSchema = z.object({
     .string()
     .min(1)
     .optional()
-    .describe('ID da empresa para o header x-company-id. Se omitido, usa HONORFY_DEFAULT_COMPANY_ID.'),
+    .describe(
+      "ID da empresa para o header x-company-id. Se omitido, usa HONORFY_DEFAULT_COMPANY_ID.",
+    ),
 });
 
 export const listMyCompaniesInputSchema = z.object({});
@@ -43,9 +45,10 @@ export const getPaymentInputSchema = companyIdFieldSchema.extend({
   transactionId: z.string().min(1),
 });
 
-export const getWalletConsolidatedBalanceInputSchema = companyIdFieldSchema.extend({});
+export const getWalletConsolidatedBalanceInputSchema =
+  companyIdFieldSchema.extend({});
 
-const incentiveListStatusEnum = z.enum(['active', 'inactive', 'all']);
+const incentiveListStatusEnum = z.enum(["active", "inactive", "all"]);
 
 export const listIncentivesInputSchema = companyIdFieldSchema.extend({
   ...paginationFields,

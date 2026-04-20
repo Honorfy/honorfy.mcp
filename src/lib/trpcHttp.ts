@@ -1,7 +1,11 @@
-import type { HonorfyMcpConfig } from './config.js';
-import { normalizeBaseUrl } from './config.js';
-import type { AccessTokenProvider } from './auth.js';
-import { HonorfyMcpError, isRetryableStatus, mapHttpStatusToCode } from './errors.js';
+import type { HonorfyMcpConfig } from "./config.js";
+import { normalizeBaseUrl } from "./config.js";
+import type { AccessTokenProvider } from "./auth.js";
+import {
+  HonorfyMcpError,
+  isRetryableStatus,
+  mapHttpStatusToCode,
+} from "./errors.js";
 
 export type TrpcRequestContext = {
   baseUrl: string;
@@ -14,13 +18,22 @@ type TrpcHttpErrorBody = {
   error?: {
     message?: string;
     code?: number;
-    data?: { code?: string; httpStatus?: number; path?: string; validationErrors?: unknown };
+    data?: {
+      code?: string;
+      httpStatus?: number;
+      path?: string;
+      validationErrors?: unknown;
+    };
   };
 };
 
-function buildUrl(baseUrl: string, procedurePath: string, input: unknown): string {
+function buildUrl(
+  baseUrl: string,
+  procedurePath: string,
+  input: unknown,
+): string {
   const url = new URL(`${normalizeBaseUrl(baseUrl)}/trpc/${procedurePath}`);
-  url.searchParams.set('input', JSON.stringify(input ?? {}));
+  url.searchParams.set("input", JSON.stringify(input ?? {}));
   return url.toString();
 }
 
@@ -39,7 +52,7 @@ function isTransientUpstream(status: number): boolean {
 export async function trpcGetJson<T>(
   procedurePath: string,
   input: unknown,
-  ctx: TrpcRequestContext
+  ctx: TrpcRequestContext,
 ): Promise<T> {
   const token = await ctx.tokenProvider.getAccessToken();
   const url = buildUrl(ctx.baseUrl, procedurePath, input);
@@ -50,17 +63,21 @@ export async function trpcGetJson<T>(
     try {
       const headers: Record<string, string> = {
         Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
+        Accept: "application/json",
       };
       if (ctx.companyId) {
-        headers['x-company-id'] = ctx.companyId;
+        headers["x-company-id"] = ctx.companyId;
       }
       try {
-        return await fetch(url, { method: 'GET', headers, signal: controller.signal });
+        return await fetch(url, {
+          method: "GET",
+          headers,
+          signal: controller.signal,
+        });
       } catch (err: unknown) {
-        if (err instanceof Error && err.name === 'AbortError') {
+        if (err instanceof Error && err.name === "AbortError") {
           throw new HonorfyMcpError({
-            code: 'UPSTREAM_ERROR',
+            code: "UPSTREAM_ERROR",
             message: `Timeout ao chamar ${procedurePath} (${ctx.timeoutMs}ms)`,
             retryable: true,
           });
@@ -82,7 +99,8 @@ export async function trpcGetJson<T>(
   if (!res.ok) {
     const parsed = parseTrpcErrorBody(text);
     const message =
-      parsed?.error?.message ?? `Erro HTTP ${res.status} ao chamar ${procedurePath}`;
+      parsed?.error?.message ??
+      `Erro HTTP ${res.status} ao chamar ${procedurePath}`;
     const code = mapHttpStatusToCode(res.status);
     throw new HonorfyMcpError({
       code,
@@ -97,7 +115,7 @@ export async function trpcGetJson<T>(
     body = JSON.parse(text) as { result?: { data?: T } };
   } catch {
     throw new HonorfyMcpError({
-      code: 'UPSTREAM_ERROR',
+      code: "UPSTREAM_ERROR",
       message: `Resposta inválida (não JSON) de ${procedurePath}`,
       details: text.slice(0, 500),
       retryable: false,
@@ -109,14 +127,14 @@ export async function trpcGetJson<T>(
     const parsed = parseTrpcErrorBody(text);
     if (parsed?.error) {
       throw new HonorfyMcpError({
-        code: 'VALIDATION_ERROR',
-        message: parsed.error.message ?? 'Erro retornado pela API',
+        code: "VALIDATION_ERROR",
+        message: parsed.error.message ?? "Erro retornado pela API",
         details: parsed.error.data,
         retryable: false,
       });
     }
     throw new HonorfyMcpError({
-      code: 'UPSTREAM_ERROR',
+      code: "UPSTREAM_ERROR",
       message: `Formato de resposta inesperado de ${procedurePath}`,
       details: text.slice(0, 500),
       retryable: false,
@@ -129,7 +147,7 @@ export async function trpcGetJson<T>(
 export function trpcContextFromConfig(
   config: HonorfyMcpConfig,
   tokenProvider: AccessTokenProvider,
-  companyId?: string
+  companyId?: string,
 ): TrpcRequestContext {
   return {
     baseUrl: config.HONORFY_API_URL,
