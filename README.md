@@ -12,7 +12,7 @@ Servidor MCP read-only para consultar dados da API Honorfy via tRPC HTTP (`/trpc
 
 | Variável | Obrigatória | Descrição |
 | --- | --- | --- |
-| `HONORFY_API_URL` | sim | URL base da API (ex.: `https://api.honorfy.io`) |
+| `HONORFY_API_URL` | não | URL base da API (padrão: `https://api.honorfy.io`) |
 | `HONORFY_USER_TOKEN` | sim | JWT do usuário (Bearer) |
 | `HONORFY_DEFAULT_COMPANY_ID` | não | Empresa padrão para tools com `x-company-id` |
 | `HONORFY_MCP_HTTP_TIMEOUT_MS` | não | Timeout HTTP em ms (padrão `25000`) |
@@ -37,7 +37,7 @@ pnpm check-types
 
 ## Como rodar localmente
 
-1. Defina as variáveis de ambiente obrigatórias.
+1. Defina as variáveis de ambiente obrigatórias (`HONORFY_USER_TOKEN`).
 2. Gere o build:
 
 ```bash
@@ -61,7 +61,6 @@ No `mcp.json` do Cursor:
       "command": "node",
       "args": ["<caminho>/dist/server.js"],
       "env": {
-        "HONORFY_API_URL": "https://api.honorfy.io",
         "HONORFY_USER_TOKEN": "${env:HONORFY_USER_TOKEN}",
         "HONORFY_DEFAULT_COMPANY_ID": ""
       }

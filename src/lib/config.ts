@@ -1,7 +1,14 @@
 import { z } from 'zod';
 
+const DEFAULT_HONORFY_API_URL = 'https://api.honorfy.io';
+
 const envSchema = z.object({
-  HONORFY_API_URL: z.string().url().describe('URL base da API (ex.: http://localhost:3000)'),
+  HONORFY_API_URL: z
+    .string()
+    .url()
+    .optional()
+    .default(DEFAULT_HONORFY_API_URL)
+    .describe('URL base da API (padrão: https://api.honorfy.io)'),
   HONORFY_USER_TOKEN: z.string().min(1).describe('JWT do usuário (Bearer)'),
   HONORFY_DEFAULT_COMPANY_ID: z.string().min(1).optional(),
   HONORFY_MCP_HTTP_TIMEOUT_MS: z.coerce.number().int().positive().optional().default(25_000),

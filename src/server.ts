@@ -15,7 +15,7 @@ async function main(): Promise<void> {
     { name: 'honorfy-mcp', version: '0.1.0' },
     {
       instructions:
-        'MCP Honorfy v1 (somente leitura). Chama a API via HTTP GET em /trpc. Defina HONORFY_API_URL, HONORFY_USER_TOKEN e opcionalmente HONORFY_DEFAULT_COMPANY_ID. Veja docs/mcp/honorfy.md.',
+        'MCP Honorfy v1 (somente leitura). Chama a API via HTTP GET em /trpc. Defina HONORFY_USER_TOKEN e opcionalmente HONORFY_API_URL (padrão https://api.honorfy.io) e HONORFY_DEFAULT_COMPANY_ID. Veja docs/mcp/honorfy.md.',
     }
   );
 
