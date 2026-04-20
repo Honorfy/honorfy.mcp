@@ -43,6 +43,8 @@ export const getPaymentInputSchema = companyIdFieldSchema.extend({
   transactionId: z.string().min(1),
 });
 
+export const getWalletConsolidatedBalanceInputSchema = companyIdFieldSchema.extend({});
+
 const incentiveListStatusEnum = z.enum(['active', 'inactive', 'all']);
 
 export const listIncentivesInputSchema = companyIdFieldSchema.extend({

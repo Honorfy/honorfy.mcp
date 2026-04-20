@@ -4,6 +4,7 @@ import { HONORFY_MCP_TOOLS_V1 } from './capabilities.js';
 describe('HONORFY_MCP_TOOLS_V1', () => {
   it('mantém lista estável de tools v1', () => {
     expect(HONORFY_MCP_TOOLS_V1).toContain('honorfy_capabilities');
-    expect(HONORFY_MCP_TOOLS_V1).toHaveLength(12);
+    expect(HONORFY_MCP_TOOLS_V1).toContain('honorfy_get_wallet_consolidated_balance');
+    expect(HONORFY_MCP_TOOLS_V1).toHaveLength(13);
   });
 });

@@ -6,6 +6,7 @@ import {
   getIncentiveGroupInputSchema,
   getIncentiveInputSchema,
   getPaymentInputSchema,
+  getWalletConsolidatedBalanceInputSchema,
   getSaleInputSchema,
   listGroupParticipantsInputSchema,
   listIncentiveGroupsInputSchema,
@@ -231,6 +232,30 @@ export function registerHonorfyTools(server: McpServer, deps: RegisterHonorfyToo
       const ctx = trpcContextFromConfig(config, tokenProvider, companyId);
       return trpcGetJson('payment.wallet.listTransactions', rest, ctx);
     })
+  );
+
+  server.registerTool(
+    'honorfy_get_wallet_consolidated_balance',
+    {
+      title: 'Obter saldo consolidado da carteira (v1)',
+      description:
+        'Retorna o consolidado da carteira (`payment.wallet.getConsolidatedBalance`), em centavos e por status.',
+      inputSchema: getWalletConsolidatedBalanceInputSchema,
+    },
+    run(
+      'honorfy_get_wallet_consolidated_balance',
+      async (args: z.infer<typeof getWalletConsolidatedBalanceInputSchema>) => {
+        const companyId = await resolveCompanyId(
+          config,
+          tokenProvider,
+          args.companyId,
+          true,
+          companyIdCache
+        );
+        const ctx = trpcContextFromConfig(config, tokenProvider, companyId);
+        return trpcGetJson('payment.wallet.getConsolidatedBalance', {}, ctx);
+      }
+    )
   );
 
   server.registerTool(

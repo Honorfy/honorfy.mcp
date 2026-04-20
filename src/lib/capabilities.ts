@@ -3,6 +3,7 @@ export const HONORFY_MCP_TOOLS_V1 = [
   'honorfy_list_sales',
   'honorfy_get_sale',
   'honorfy_list_payments',
+  'honorfy_get_wallet_consolidated_balance',
   'honorfy_get_payment',
   'honorfy_list_incentives',
   'honorfy_get_incentive',
